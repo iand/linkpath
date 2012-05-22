@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+# linkpath
+# This work is hereby released into the Public Domain. 
+#
+# To view a copy of the public domain dedication, visit 
+# [http://creativecommons.org/licenses/publicdomain](http://creativecommons.org/licenses/publicdomain) 
+# or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+import os
+import os.path
+import httplib2
+import rdflib
+import sys
+
+sys.path.insert(0, '../linkpath')
+from linkpath import LinkPathProcessor
+
+import optparse
+
+def main():
+  p = optparse.OptionParser()
+  opts, args = p.parse_args()
+
+  if len(args) == 2:
+    uri = args[0]
+    path = args[1]
+    
+    wp = LinkPathProcessor()
+    wp.bind("foaf", "http://xmlns.com/foaf/0.1/")
+    wp.bind("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#")
+    
+    res = wp.select(uri, path)
+    for r in res:
+      print r
+    
+  else:
+    sys.stderr.write("Expecting two arguments: uri and path\n")
+    sys.exit(1)
+
+if __name__ == "__main__":
+  main()
